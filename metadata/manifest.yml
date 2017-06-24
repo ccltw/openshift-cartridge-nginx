@@ -1,0 +1,59 @@
+---
+Name: nginx
+Cartridge-Short-Name: NGINX
+Display-Name: nginx 1.12.0
+Description: 'nginx 1.12.0'
+Version: '1.12.0'
+Versions:
+- '1.12.0'
+Website: https://github.com/ccltw/openshift-cartridge-nginx.git
+Cartridge-Version: 0.1
+Cartridge-Vendor: ccltw
+Categories:
+- service
+- nginx
+- web_framework
+Provides:
+- nginx-1.12.0
+- nginx
+Publishes:
+  get-doc-root:
+    Type: "FILESYSTEM:doc-root"
+  publish-http-url:
+    Type: "NET_TCP:httpd-proxy-info"
+  publish-gear-endpoint:
+    Type: "NET_TCP:gear-endpoint-info"
+Subscribes:
+  set-env:
+    Type: ENV:*
+    Required: false
+  set-doc-url:
+    Type: STRING:urlpath
+    Required: false
+Scaling:
+  Min: 1
+  Max: -1
+Group-Overrides:
+- components:
+  - web_framework
+  - web_proxy
+  - cron
+Endpoints:
+- Private-IP-Name: IP
+  Private-Port-Name: PORT
+  Private-Port: 8080
+  Public-Port-Name: PROXY_PORT
+  Protocols:
+  - http
+  - ws
+  Options:
+    primary: true
+  Mappings:
+  - Frontend: ''
+    Backend: ''
+    Options:
+      websocket: true
+  - Frontend: "/health"
+    Backend: ''
+    Options:
+      health: true
