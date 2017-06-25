@@ -85,7 +85,6 @@ function _nginx_stop() {
 }
 
 function _nginx_update_conf() {
-	echo "Ignore"
     CONF_FILE=${OPENSHIFT_REPO_DIR}/.openshift/nginx.conf.erb
     if [ -f "${CONF_FILE}" ]; then
         oo-erb ${CONF_FILE} > ${NGINX_HTTP_CONFIG_FILE}
