@@ -9,6 +9,15 @@ NGINX_EXEC=${OPENSHIFT_NGINX_DIR}version/sbin/nginx
 NGINX_CONFIG_FILE=${OPENSHIFT_NGINX_DIR}conf/nginx.conf
 NGINX_HTTP_CONFIG_FILE=${OPENSHIFT_NGINX_DIR}conf/nginx_http.conf
 
+function run_hook() {
+  local path="$OPENSHIFT_REPO_DIR/.openshift/action_hooks/$1"
+  if [ -f "$path" -a -x "$path" ]
+  then
+    "$path"
+  else
+    return 0
+  fi
+}
 
 function isrunning() {
     if [ -f "${OPENSHIFT_NGINX_PID}" ]; then
@@ -101,12 +110,16 @@ function start() {
     _nginx_update_conf
     _nginx_start
     isrunning && echo "Nginx instance is started"
+
+    run_hook start
 }
 
 
 function stop() {
     _nginx_stop
     isrunning  ||  echo "Nginx instance is stopped"
+
+    run_hook stop
 }
 
 
